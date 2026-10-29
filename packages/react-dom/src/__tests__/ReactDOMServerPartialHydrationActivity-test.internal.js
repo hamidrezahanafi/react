@@ -2154,18 +2154,8 @@ describe('ReactDOMServerPartialHydrationActivity', () => {
     await waitForAll([]);
 
     expect(container.getElementsByTagName('span')[0]).toBe(span);
-    if (gate(flags => flags.alwaysThrottleRetries)) {
-      // TODO: This is a bug. The transition never commits, so the boundary
-      // stays dehydrated with the old context value and the sibling never
-      // appears.
-      expect(span.textContent).toBe('Hello');
-      expect(container.getElementsByTagName('p')).toHaveLength(0);
-    } else {
-      expect(span.textContent).toBe('Hi');
-      expect(container.getElementsByTagName('p')[0].textContent).toBe(
-        'Sibling',
-      );
-    }
+    expect(span.textContent).toBe('Hi');
+    expect(container.getElementsByTagName('p')[0].textContent).toBe('Sibling');
     expect(container.firstChild.firstChild.textContent).toBe('1');
   });
 

@@ -266,6 +266,7 @@ import {
 import {
   scheduleUpdateOnFiber,
   renderDidSuspendDelayIfPossible,
+  pingSuspendedRetryLanes,
   markSkippedUpdateLanes,
   markRenderDerivedCause,
   getWorkInProgressRoot,
@@ -1074,6 +1075,7 @@ function updateDehydratedActivityComponent(
       // outside a transition.
       //
       // This path should only happen if the hydration lane already suspended.
+      pingSuspendedRetryLanes(current.lanes);
       renderDidSuspendDelayIfPossible();
       return retryActivityComponentWithoutHydrating(
         current,
@@ -3111,6 +3113,7 @@ function updateDehydratedSuspenseComponent(
         // band. Should we fix this? There's a version of this bug that happens
         // during client rendering, too. Needs more consideration.
       } else {
+        pingSuspendedRetryLanes(current.lanes);
         renderDidSuspendDelayIfPossible();
       }
       return retrySuspenseComponentWithoutHydrating(

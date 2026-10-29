@@ -90,7 +90,7 @@ const TransitionUpdateLanes =
 const TransitionDeferredLanes =
   TransitionLane11 | TransitionLane12 | TransitionLane13 | TransitionLane14;
 
-const RetryLanes: Lanes = /*                            */ 0b0000011110000000000000000000000;
+export const RetryLanes: Lanes = /*                     */ 0b0000011110000000000000000000000;
 const RetryLane1: Lane = /*                             */ 0b0000000010000000000000000000000;
 const RetryLane2: Lane = /*                             */ 0b0000000100000000000000000000000;
 const RetryLane3: Lane = /*                             */ 0b0000001000000000000000000000000;

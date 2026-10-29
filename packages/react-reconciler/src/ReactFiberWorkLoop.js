@@ -217,7 +217,9 @@ import {
   GestureLane,
   SomeTransitionLane,
   SomeRetryLane,
+  RetryLanes,
   IdleLane,
+  intersectLanes,
 } from './ReactFiberLane';
 import {
   DiscreteEventPriority,
@@ -2555,6 +2557,23 @@ export function markSkippedUpdateLanes(lane: Lane | Lanes): void {
 export function renderDidSuspend(): void {
   if (workInProgressRootExitStatus === RootInProgress) {
     workInProgressRootExitStatus = RootSuspended;
+  }
+}
+
+export function pingSuspendedRetryLanes(lanes: Lanes): void {
+  // A retry on these lanes may have already completed and been held back by
+  // the retry throttle. If the in-progress render is about to wait on it, the
+  // retry must be pinged, or nothing will schedule it again.
+  const root = workInProgressRoot;
+  if (root === null) {
+    return;
+  }
+  const suspendedRetryLanes = intersectLanes(
+    intersectLanes(lanes, RetryLanes),
+    root.suspendedLanes,
+  );
+  if (suspendedRetryLanes !== NoLanes) {
+    markRootPinged(root, suspendedRetryLanes);
   }
 }
 
